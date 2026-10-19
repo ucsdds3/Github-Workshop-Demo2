@@ -4,128 +4,182 @@ This tutorial walks you through simulating a **merge conflict** and resolving it
 
 ## Section 1: Intro
 
-These steps are to be done by **One** Person in your group. The other person will have things to do in the future don't worry! Please be sure to pay attention though.
+These steps should be completed by **Person 1**. Person 2 will have things to do shortly, so pay attention!
 
-### 🚀 Step 1. Fork this Repository
+### 🚀 Step 1: Fork this Repository
 
-1. You can fork this repository by clicking the fork icon at the top. This will copy the repository into your Github account.
+1. Click the **Fork** button at the top of this repository. This creates a copy under your own GitHub account.
 
-### 💻 Step 2. Clone Your Repository Locally
+### 💻 Step 2: Clone Your Repository Locally
 
-1. Expand the code button, select HTTPS, and copy the url.
+1. Open your forked repository, click **Code**, select **HTTPS**, and copy the URL.
 2. Open your terminal (or Git Bash), then run:
+
 ```bash
 git clone <url>
 cd Github-Workshop-Demo2
 ```
 
-### Step 3.📝 Create a file
+### 📝 Step 3: Create a File
 
-1. Create a text file called adventure.txt using the `touch` command
-2. Add and commit your file
+1. Create a text file called `adventure.txt` using `touch`.
+2. Add the following line to the file:
+
+```text
+The hero begins their adventure.
+```
+
+3. Save, stage, commit, and push your changes:
 
 ```bash
-git add .
+git add adventure.txt
 git commit -m "Add adventure.txt"
 git push
 ```
 
-## Section 2: Branching, Merging and Merge Conflicts
-### Step 1: Add as a collaborator!
-Person 1, add person 2 as a collaborator on your new github repo!
+## Section 2: Branching, Merging, and Merge Conflicts
 
-### Step 2: Person 2, Clone the same repository
+### Step 1: Add Your Partner as a Collaborator!
 
-Follow the steps in section 1.2 to clone the same repository to your local working environment.
+Person 1, go to your forked repository's **Settings → Collaborators** and invite Person 2.
 
-### Step 3: (Person 1&2) Create a new Branch
+**Person 2 must accept the invitation** before continuing.
 
-Create your own branches **with different names** and switch to it. The `-b` flag is a shortcut from doing `git branch [branch_name]` first.
+### Step 2: Person 2, Clone the Same Repository
+
+Person 2, follow the instructions from Section 1, Step 2.
+
+**Important:** Clone Person 1's forked repository, not the original DS3 repository.
+
+### Step 3: Both People Create a Branch
+
+Each person should create their own branch with a **different name**.
+
+The `-b` flag creates a new branch and switches to it.
+
+Person 1:
 
 ```bash
-git checkout -b [branch_name]
+git checkout -b feature-a
 ```
 
-### Step 4: Edits!
-
-On your local adventure.txt files, write these edits to them
-
-- Person 1:
-  - `The hero finds a magical sword. `
-- Person 2:
-  - `The Hero swings and misses. `
-
-Save, then:
+Person 2:
 
 ```bash
-git add story.txt
-git commit -m "updates!"
+git checkout -b feature-b
 ```
 
-push your new changes
+### Step 4: Make Your Edits!
+
+Both people should **replace the existing line** in `adventure.txt` with the following:
+
+**Person 1:**
+```text
+The hero finds a magical sword.
+```
+
+**Person 2:**
+```text
+The hero swings and misses.
+```
+
+Save your changes, then both run:
 
 ```bash
-git push
+git add adventure.txt
+git commit -m "Update adventure"
+```
+
+Push your new branches to GitHub:
+
+Person 1:
+```bash
+git push -u origin feature-a
+```
+
+Person 2:
+```bash
+git push -u origin feature-b
 ```
 
 ### Step 5: Pull Request
 
-Person 1 ones a pull request, adds a short description, and adds Person 2 as a reviewer.
+1. Person 1 opens a **Pull Request (PR)** from `feature-a` into `main`, adds a short description, and requests Person 2 as a reviewer.
+2. Person 2 opens **Files changed**, reviews the changes, and merges the PR.
+3. There should be **no conflicts yet**!
 
-Person 2 goes to Changed Files, reviews the changes and merge the pull request. You should have no conflicts at this point.
+### Step 6: Merge and Create a Conflict
 
-### Step 6: Merge and conflicts
-
-Person 2 goes back to the main branch and pull the new changes
+Person 2, switch back to `main` and pull the latest changes:
 
 ```bash
 git checkout main
 git pull
 ```
 
-Person 2 tries to merge their branch into main.
+Now try merging your feature branch into `main`:
 
 ```bash
-git merge [branch_name]
+git merge feature-b
 ```
 
-You should see, and on VSCode, adventures.txt will open with the conflicts
+You should see something like:
 
-```bash
+```text
 Auto-merging adventure.txt
-CONFLICT (content): Merge conflict in story.txt
+CONFLICT (content): Merge conflict in adventure.txt
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-## Section 3: Resolving conflicts!
+Open `adventure.txt` in VS Code to see the conflict.
 
-### Step 1: Resolve the conflict
+**Why did this happen?** Both people changed the same line differently, and Git doesn't know which version to keep.
 
-Manually edit it to something like
+## Section 3: Resolving Conflicts!
 
-```bash
-The Hero finds a magical sword.
-The Hero swings and misses
+### Step 1: Resolve the Conflict
+
+Open `adventure.txt` in VS Code. You'll see both versions of the conflicting line.
+
+Decide what you want to keep. For example:
+
+```text
+The hero finds a magical sword.
+The hero swings and misses.
 ```
 
-then mark it resolved and commit confirm merge on VScode.
+Remove the conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) if editing manually, then save the file.
+
+Stage and commit the resolved file:
 
 ```bash
 git add adventure.txt
 git commit -m "Resolve merge conflict"
 ```
 
-push your updated main branch
+Push your updated `main` branch:
 
 ```bash
 git push
 ```
 
-### Step 5: Clean up
+**Congratulations! You've successfully resolved a merge conflict! 🎉**
 
-If you’re done with the exercise, you can delete your branches:
+### Step 2: Clean Up (Optional)
+
+If you're done with the exercise, you can delete your feature branch locally and on GitHub.
+
+First, make sure you're on `main`:
 
 ```bash
-git branch -d [branch_name]
-git push origin --delete [branch_name]
+git checkout main
 ```
+
+Person 2 can then run:
+
+```bash
+git branch -d feature-b
+git push origin --delete feature-b
+```
+
+Person 1 can similarly delete `feature-a` once they're finished.
